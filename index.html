@@ -6,6 +6,8 @@
     <title>Generador de Fotochecks - Consorcio Vial BAAS</title>
     <!-- Librería para el Código QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Librería para capturar el fotocheck y descargarlo como imagen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         :root {
@@ -108,17 +110,26 @@
             background-color: #002244;
         }
 
+        .btn-download {
+            background-color: #28a745;
+            margin-top: 15px;
+            display: none; /* Oculto hasta que se genere */
+        }
+
+        .btn-download:hover {
+            background-color: #218838;
+        }
+
         /* --- Estilos del Fotocheck (La Tarjeta) --- */
         .fotocheck-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
         }
 
         .fotocheck {
-            width: 270px;
-            height: 420px;
+            width: 280px;
+            height: 440px;
             background-color: var(--card-bg);
             border-radius: 15px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -129,33 +140,45 @@
             position: relative;
         }
 
+        /* Encabezado con mayor protagonismo del logo */
         .fc-header {
             background-color: var(--primary-color);
             color: white;
-            padding: 15px 10px;
+            padding: 20px 10px;
             text-align: center;
-            border-bottom: 4px solid var(--accent-color);
+            border-bottom: 5px solid var(--accent-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        .fc-logo {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
-            margin-bottom: 8px;
+        .fc-logo-container {
+            width: 80px;
+            height: 80px;
             background: white;
             border-radius: 50%;
-            padding: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 2px solid var(--accent-color);
+        }
+
+        .fc-logo {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
         }
 
         .fc-header h3 {
             margin: 0;
-            font-size: 14px;
-            letter-spacing: 0.5px;
+            font-size: 13px;
+            letter-spacing: 0.8px;
             line-height: 1.2;
+            font-weight: 700;
         }
 
         .fc-body {
@@ -171,17 +194,17 @@
             font-size: 16px;
             font-weight: bold;
             color: var(--text-main);
-            margin: 8px 0 4px 0;
+            margin: 10px 0 4px 0;
             text-transform: uppercase;
             line-height: 1.2;
         }
 
         .fc-puesto {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
             font-weight: 600;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
 
         .fc-qr-container {
@@ -192,12 +215,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
         }
 
         .fc-footer-dni {
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 11px;
             font-weight: bold;
             color: var(--text-muted);
@@ -210,6 +233,7 @@
             margin-top: 50%;
             transform: translateY(-50%);
             padding: 0 20px;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -237,6 +261,9 @@
             </div>
 
             <button onclick="generarFotocheck()">Generar Fotocheck</button>
+            
+            <!-- Botón de Descarga -->
+            <button id="btnDownload" class="btn-download" onclick="descargarFotocheck()">📥 Descargar Fotocheck</button>
         </div>
 
         <!-- Panel del Fotocheck -->
@@ -250,8 +277,10 @@
                 <!-- Contenido real del fotocheck (Oculto por defecto) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
-                        <!-- Logo de la empresa jalado directo del repositorio -->
-                        <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
+                        <div class="fc-logo-container">
+                            <!-- Logo de la empresa más grande y con marco llamativo -->
+                            <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
+                        </div>
                         <h3>CONSORCIO VIAL BAAS</h3>
                     </div>
                     <div class="fc-body">
@@ -279,6 +308,7 @@
             const placeholder = document.getElementById("placeholder");
             const fotocheckContent = document.getElementById("fotocheck-content");
             const qrContainer = document.getElementById("out-qr");
+            const btnDownload = document.getElementById("btnDownload");
 
             const regexDNI = /^[0-9]{8}$/;
 
@@ -305,11 +335,30 @@
 
             new QRCode(qrContainer, {
                 text: dni,
-                width: 100,
-                height: 100,
+                width: 90,
+                height: 90,
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // Mostrar el botón de descarga una vez generado
+            btnDownload.style.display = "block";
+        }
+
+        function descargarFotocheck() {
+            const credencial = document.getElementById("credencial");
+            const nombreTrabajador = document.getElementById("nombreInput").value.trim().replace(/\s+/g, '_');
+
+            // Usamos html2canvas para convertir el div de la credencial en una imagen
+            html2canvas(credencial, {
+                scale: 3, // Aumenta la calidad y nitidez de la imagen exportada
+                useCORS: true
+            }).then(canvas => {
+                const enlace = document.createElement("a");
+                enlace.download = `Fotocheck_${nombreTrabajador}.png`;
+                enlace.href = canvas.toDataURL("image/png");
+                enlace.click();
             });
         }
     </script>
