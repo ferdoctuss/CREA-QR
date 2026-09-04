@@ -152,26 +152,26 @@
             justify-content: center;
         }
 
-        /* Logo totalmente circular con marco circular blanco destacado */
+        /* Círculo con fondo BLANCO SÓLIDO y marco blanco */
         .fc-logo-container {
             width: 70px;
             height: 70px;
-            background: transparent;
+            background-color: #ffffff !important; /* Fondo blanco sólido obligatorio */
             border-radius: 50%; /* Círculo perfecto */
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             margin-bottom: 8px;
-            padding: 3px;
-            border: 3px solid #ffffff; /* Marco circular de color blanco */
+            padding: 4px;
+            border: 3px solid #ffffff; /* Marco circular blanco puro */
         }
 
         .fc-logo {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 50%; /* Imagen interior también circular */
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            border-radius: 50%;
         }
 
         .fc-header h3 {
@@ -292,7 +292,7 @@
                 <!-- Contenido real del fotocheck (Oculto por defecto) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
-                        <!-- Logo circular con marco circular blanco -->
+                        <!-- Logo circular con fondo blanco sólido y marco blanco -->
                         <div class="fc-logo-container">
                             <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
                         </div>
