@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de QR para DNI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --bg-color: #f4f7f6;
+            --box-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--box-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        #qr-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            min-height: 200px; /* Mantiene el espacio visual */
+        }
+
+        .error {
+            color: #d9534f;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Generador de QR</h2>
+        <p>Ingresa el número de DNI</p>
+        
+        <input type="text" id="dniInput" placeholder="Ej: 12345678" maxlength="8" pattern="\d{8}">
+        <div id="errorMessage" class="error">Por favor, ingresa 8 dígitos válidos.</div>
+        
+        <button onclick="generarQR()">Generar QR</button>
+
+        <div id="qr-container"></div>
+    </div>
+
+    <script>
+        function generarQR() {
+            const dni = document.getElementById("dniInput").value.trim();
+            const qrContainer = document.getElementById("qr-container");
+            const errorMessage = document.getElementById("errorMessage");
+
+            // Limpiamos el QR anterior si existe
+            qrContainer.innerHTML = "";
+
+            // Validación: Solo números y exactamente 8 dígitos
+            const regexDNI = /^[0-9]{8}$/;
+
+            if (!regexDNI.test(dni)) {
+                errorMessage.style.display = "block";
+                return;
+            }
+
+            // Si es válido, ocultamos el error y generamos el QR
+            errorMessage.style.display = "none";
+            new QRCode(qrContainer, {
+                text: dni,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+    </script>
+</body>
+</html>
