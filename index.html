@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Fotocheck Horizontal - Consorcio Vial BAAS</title>
+    <title>Generador de Fotochecks - Consorcio Vial BAAS</title>
     <!-- Librería para el Código QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- Librería para capturar el fotocheck y descargarlo como imagen -->
@@ -34,7 +34,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 40px;
-            max-width: 950px;
+            max-width: 900px;
             width: 100%;
             justify-content: center;
             align-items: flex-start;
@@ -120,7 +120,7 @@
             background-color: #218838;
         }
 
-        /* --- Estilos del Fotocheck Horizontal --- */
+        /* --- Estilos del Fotocheck Vertical --- */
         .fotocheck-wrapper {
             display: flex;
             flex-direction: column;
@@ -128,8 +128,8 @@
         }
 
         .fotocheck {
-            width: 450px;
-            height: 270px;
+            width: 280px;
+            height: 440px;
             background-color: var(--card-bg);
             border-radius: 15px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -140,150 +140,108 @@
             position: relative;
         }
 
-        /* Franja superior horizontal */
         .fc-header {
             background-color: var(--primary-color);
             color: white;
-            padding: 12px 20px;
+            padding: 18px 10px 15px 10px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-color);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            border-bottom: 4px solid var(--accent-color);
-            height: 55px;
+            justify-content: center;
         }
 
-        .fc-header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .fc-badge-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
         .fc-logo-container {
-            width: 46px;
-            height: 46px;
+            width: 75px;
+            height: 75px;
             background: white;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            padding: 3px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin-bottom: 8px;
+            padding: 5px;
             border: 2px solid var(--accent-color);
-            flex-shrink: 0;
         }
 
         .fc-logo {
-            width: 38px;
-            height: 38px;
+            width: 65px;
+            height: 65px;
             object-fit: contain;
         }
 
         .fc-header h3 {
             margin: 0;
-            font-size: 14px;
+            font-size: 13px;
             letter-spacing: 0.8px;
+            line-height: 1.2;
             font-weight: 700;
         }
 
-        .fc-badge-tag {
-            font-size: 10px;
-            background-color: var(--accent-color);
-            color: #000;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Cuerpo principal horizontal con dos columnas */
         .fc-body {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-grow: 1;
-            background: linear-gradient(to bottom, #ffffff, #fcfcfc);
-        }
-
-        .fc-info {
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
             flex-grow: 1;
-            padding-right: 15px;
-            text-align: left;
-        }
-
-        .fc-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
+            text-align: center;
         }
 
         .fc-name {
             font-size: 16px;
             font-weight: bold;
             color: var(--text-main);
-            margin-bottom: 12px;
+            margin: 10px 0 4px 0;
             text-transform: uppercase;
             line-height: 1.2;
         }
 
         .fc-puesto {
-            font-size: 13px;
-            color: var(--primary-color);
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .fc-dni-box {
             font-size: 12px;
-            color: var(--text-main);
+            color: var(--text-muted);
             font-weight: 600;
-        }
-
-        .fc-dni-box span {
-            font-family: monospace;
-            font-size: 14px;
-            letter-spacing: 1px;
-            background: #eee;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 5px;
-        }
-
-        .fc-qr-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: white;
-            padding: 8px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+            text-transform: uppercase;
+            margin-bottom: 15px;
         }
 
         .fc-qr-container {
-            width: 90px;
-            height: 90px;
+            background: white;
+            padding: 6px;
+            border: 2px solid #eee;
+            border-radius: 6px;
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100px;
+            height: 100px;
+        }
+
+        .fc-footer-dni {
+            margin-top: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-muted);
         }
 
         /* Mensaje de espera */
         .placeholder-text {
             color: #aaa;
             text-align: center;
-            margin-top: 110px;
+            margin-top: 50%;
+            transform: translateY(-50%);
             padding: 0 20px;
             font-size: 15px;
-            width: 100%;
         }
     </style>
 </head>
@@ -316,7 +274,7 @@
             <button id="btnDownload" class="btn-download" onclick="descargarFotocheck()">📥 Descargar Fotocheck</button>
         </div>
 
-        <!-- Panel del Fotocheck Horizontal -->
+        <!-- Panel del Fotocheck Vertical -->
         <div class="fotocheck-wrapper">
             <div class="fotocheck" id="credencial">
                 <!-- Estado vacío inicial -->
@@ -324,36 +282,25 @@
                     Completa los datos y presiona "Generar Fotocheck"
                 </div>
 
-                <!-- Contenido real del fotocheck horizontal (Oculto por defecto) -->
+                <!-- Contenido real del fotocheck (Oculto por defecto) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
-                        <div class="fc-header-left">
-                            <div class="fc-logo-container">
-                                <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
-                            </div>
-                            <h3>CONSORCIO VIAL BAAS</h3>
+                        <!-- Palabra CREDENCIAL en color amarillo -->
+                        <div class="fc-badge-label">CREDENCIAL</div>
+                        <div class="fc-logo-container">
+                            <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
                         </div>
-                        <div class="fc-badge-tag">CREDENCIAL</div>
+                        <h3>CONSORCIO VIAL BAAS</h3>
                     </div>
-                    
                     <div class="fc-body">
-                        <div class="fc-info">
-                            <div class="fc-label">Colaborador</div>
-                            <div class="fc-name" id="out-nombre">NOMBRE DEL TRABAJADOR</div>
-                            
-                            <div class="fc-label">Puesto</div>
-                            <div class="fc-puesto" id="out-puesto">PUESTO</div>
-                            
-                            <div class="fc-dni-box">
-                                DNI: <span id="out-dni">12345678</span>
-                            </div>
+                        <div class="fc-name" id="out-nombre">NOMBRE DEL TRABAJADOR</div>
+                        <div class="fc-puesto" id="out-puesto">PUESTO</div>
+                        
+                        <div class="fc-qr-container" id="out-qr">
+                            <!-- Aquí va el código QR -->
                         </div>
 
-                        <div class="fc-qr-wrapper">
-                            <div class="fc-qr-container" id="out-qr">
-                                <!-- Aquí va el código QR -->
-                            </div>
-                        </div>
+                        <div class="fc-footer-dni">DNI: <span id="out-dni"></span></div>
                     </div>
                 </div>
             </div>
@@ -397,8 +344,8 @@
 
             new QRCode(qrContainer, {
                 text: dni,
-                width: 80,
-                height: 80,
+                width: 90,
+                height: 90,
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
@@ -416,7 +363,7 @@
                 useCORS: true
             }).then(canvas => {
                 const enlace = document.createElement("a");
-                enlace.download = `Fotocheck_Horizontal_${nombreTrabajador}.png`;
+                enlace.download = `Fotocheck_${nombreTrabajador}.png`;
                 enlace.href = canvas.toDataURL("image/png");
                 enlace.click();
             });
