@@ -156,15 +156,15 @@
         .fc-logo-container {
             width: 70px;
             height: 70px;
-            background-color: #ffffff !important; /* Fondo blanco sólido obligatorio */
-            border-radius: 50%; /* Círculo perfecto */
+            background-color: #ffffff !important;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             margin-bottom: 8px;
             padding: 4px;
-            border: 3px solid #ffffff; /* Marco circular blanco puro */
+            border: 3px solid #ffffff;
         }
 
         .fc-logo {
@@ -182,7 +182,7 @@
             font-weight: 700;
         }
 
-        /* Caja profesional para la palabra CREDENCIAL debajo del nombre de la empresa */
+        /* Caja profesional para la palabra CREDENCIAL */
         .fc-badge-box {
             background-color: var(--accent-color);
             color: #002244;
@@ -292,13 +292,10 @@
                 <!-- Contenido real del fotocheck (Oculto por defecto) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
-                        <!-- Logo circular con fondo blanco sólido y marco blanco -->
                         <div class="fc-logo-container">
                             <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
                         </div>
                         <h3>CONSORCIO VIAL BAAS</h3>
-                        
-                        <!-- Palabra CREDENCIAL debajo del nombre de la empresa -->
                         <div class="fc-badge-box">CREDENCIAL</div>
                     </div>
                     <div class="fc-body">
@@ -365,16 +362,25 @@
 
         function descargarFotocheck() {
             const credencial = document.getElementById("credencial");
-            const nombreTrabajador = document.getElementById("nombreInput").value.trim().replace(/\s+/g, '_');
+            let nombreTrabajador = document.getElementById("nombreInput").value.trim().replace(/\s+/g, '_');
+            if (!nombreTrabajador) nombreTrabajador = "Trabajador";
 
             html2canvas(credencial, {
                 scale: 3,
-                useCORS: true
+                useCORS: true,
+                backgroundColor: null
             }).then(canvas => {
-                const enlace = document.createElement("a");
-                enlace.download = `Fotocheck_${nombreTrabajador}.png`;
-                enlace.href = canvas.toDataURL("image/png");
-                enlace.click();
+                // Convertir el canvas a un Blob asegurando el tipo image/png
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const enlace = document.createElement("a");
+                    enlace.href = url;
+                    enlace.download = `Fotocheck_${nombreTrabajador}.png`;
+                    document.body.appendChild(enlace);
+                    enlace.click();
+                    document.body.removeChild(enlace);
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
             });
         }
     </script>
