@@ -6,16 +6,16 @@
     <title>Generador de Fotochecks - Consorcio Vial BAAS</title>
     <!-- Librería para el Código QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- Librería para capturar el fotocheck y descargarlo como imagen -->
+    <!-- Librería para descargar la imagen -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         :root {
-            --primary-color: #003366; /* Azul corporativo */
-            --accent-color: #f2a900; /* Acento amarillo/naranja tipo construcción/vial */
+            --primary-color: #003366; 
+            --accent-color: #f2a900; 
             --bg-color: #e9ecef;
             --card-bg: #ffffff;
-            --text-main: #333333;
+            --text-main: #2b2b2b;
             --text-muted: #6c757d;
         }
 
@@ -40,7 +40,7 @@
             align-items: flex-start;
         }
 
-        /* --- Estilos del Formulario --- */
+        /* --- Panel del Formulario --- */
         .form-container {
             background-color: var(--card-bg);
             padding: 30px;
@@ -48,13 +48,14 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             flex: 1;
             min-width: 300px;
-            max-width: 400px;
+            max-width: 380px;
         }
 
         .form-container h2 {
             color: var(--primary-color);
             margin-top: 0;
             margin-bottom: 20px;
+            font-size: 20px;
         }
 
         .input-group {
@@ -113,14 +114,14 @@
         .btn-download {
             background-color: #28a745;
             margin-top: 15px;
-            display: none; /* Oculto hasta que se genere */
+            display: none;
         }
 
         .btn-download:hover {
             background-color: #218838;
         }
 
-        /* --- Estilos del Fotocheck (La Tarjeta) --- */
+        /* --- Estructura Vertical del Fotocheck --- */
         .fotocheck-wrapper {
             display: flex;
             flex-direction: column;
@@ -128,23 +129,23 @@
         }
 
         .fotocheck {
-            width: 280px;
-            height: 440px;
+            width: 290px;
+            height: 460px; /* Formato vertical alargado ideal */
             background-color: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            border: 1px solid #ddd;
+            border: 1px solid #dcdcdc;
             position: relative;
         }
 
-        /* Encabezado con mayor protagonismo del logo */
+        /* Encabezado Vertical Destacado */
         .fc-header {
             background-color: var(--primary-color);
             color: white;
-            padding: 20px 10px;
+            padding: 22px 10px 18px 10px;
             text-align: center;
             border-bottom: 5px solid var(--accent-color);
             display: flex;
@@ -154,86 +155,103 @@
         }
 
         .fc-logo-container {
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             background: white;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            margin-bottom: 10px;
-            padding: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            margin-bottom: 8px;
+            padding: 4px;
             border: 2px solid var(--accent-color);
         }
 
         .fc-logo {
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
             object-fit: contain;
         }
 
         .fc-header h3 {
             margin: 0;
             font-size: 13px;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
             line-height: 1.2;
             font-weight: 700;
         }
 
+        /* Cuerpo de la tarjeta vertical */
         .fc-body {
-            padding: 15px;
+            padding: 20px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             flex-grow: 1;
             text-align: center;
+            justify-content: space-between;
+        }
+
+        .fc-info-group {
+            width: 100%;
         }
 
         .fc-name {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: bold;
             color: var(--text-main);
-            margin: 10px 0 4px 0;
+            margin: 0 0 5px 0;
             text-transform: uppercase;
             line-height: 1.2;
+            word-break: break-word;
         }
 
         .fc-puesto {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-muted);
             font-weight: 600;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .fc-qr-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 5px;
         }
 
         .fc-qr-container {
             background: white;
             padding: 6px;
-            border: 2px solid #eee;
-            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100px;
             height: 100px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .fc-footer-dni {
-            margin-top: 12px;
-            font-size: 11px;
+            margin-top: 8px;
+            font-size: 12px;
             font-weight: bold;
-            color: var(--text-muted);
+            color: var(--primary-color);
+            letter-spacing: 0.5px;
         }
 
-        /* Mensaje de espera */
+        /* Mensaje inicial */
         .placeholder-text {
             color: #aaa;
             text-align: center;
-            margin-top: 50%;
+            margin-top: 60%;
             transform: translateY(-50%);
             padding: 0 20px;
-            font-size: 15px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -242,11 +260,11 @@
     <div class="dashboard">
         <!-- Panel del Formulario -->
         <div class="form-container">
-            <h2>Datos del Trabajador</h2>
+            <h2>Generador de Credenciales</h2>
             
             <div class="input-group">
                 <label for="nombreInput">Nombres y Apellidos</label>
-                <input type="text" id="nombreInput" placeholder="Ej: Juan Pérez">
+                <input type="text" id="nombreInput" placeholder="Ej: Carlos Mendoza">
             </div>
 
             <div class="input-group">
@@ -257,41 +275,39 @@
 
             <div class="input-group">
                 <label for="puestoInput">Puesto / Cargo</label>
-                <input type="text" id="puestoInput" placeholder="Ej: Ingeniero Residente">
+                <input type="text" id="puestoInput" placeholder="Ej: Supervisor de Obra">
             </div>
 
             <button onclick="generarFotocheck()">Generar Fotocheck</button>
-            
-            <!-- Botón de Descarga -->
             <button id="btnDownload" class="btn-download" onclick="descargarFotocheck()">📥 Descargar Fotocheck</button>
         </div>
 
-        <!-- Panel del Fotocheck -->
+        <!-- Panel del Fotocheck Vertical -->
         <div class="fotocheck-wrapper">
             <div class="fotocheck" id="credencial">
                 <!-- Estado vacío inicial -->
                 <div id="placeholder" class="placeholder-text">
-                    Completa los datos y presiona "Generar Fotocheck"
+                    Rellena los datos a la izquierda para armar el fotocheck vertical.
                 </div>
 
-                <!-- Contenido real del fotocheck (Oculto por defecto) -->
+                <!-- Contenido real del fotocheck (Oculto al inicio) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
                         <div class="fc-logo-container">
-                            <!-- Logo de la empresa más grande y con marco llamativo -->
                             <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
                         </div>
                         <h3>CONSORCIO VIAL BAAS</h3>
                     </div>
                     <div class="fc-body">
-                        <div class="fc-name" id="out-nombre">NOMBRE DEL TRABAJADOR</div>
-                        <div class="fc-puesto" id="out-puesto">PUESTO</div>
-                        
-                        <div class="fc-qr-container" id="out-qr">
-                            <!-- Aquí va el código QR -->
+                        <div class="fc-info-group">
+                            <div class="fc-name" id="out-nombre">NOMBRE DEL TRABAJADOR</div>
+                            <div class="fc-puesto" id="out-puesto">PUESTO</div>
                         </div>
-
-                        <div class="fc-footer-dni">DNI: <span id="out-dni"></span></div>
+                        
+                        <div class="fc-qr-wrapper">
+                            <div class="fc-qr-container" id="out-qr"></div>
+                            <div class="fc-footer-dni">DNI: <span id="out-dni"></span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -342,7 +358,6 @@
                 correctLevel : QRCode.CorrectLevel.H
             });
 
-            // Mostrar el botón de descarga una vez generado
             btnDownload.style.display = "block";
         }
 
@@ -350,9 +365,8 @@
             const credencial = document.getElementById("credencial");
             const nombreTrabajador = document.getElementById("nombreInput").value.trim().replace(/\s+/g, '_');
 
-            // Usamos html2canvas para convertir el div de la credencial en una imagen
             html2canvas(credencial, {
-                scale: 3, // Aumenta la calidad y nitidez de la imagen exportada
+                scale: 3, 
                 useCORS: true
             }).then(canvas => {
                 const enlace = document.createElement("a");
