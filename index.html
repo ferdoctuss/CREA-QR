@@ -143,7 +143,7 @@
         .fc-header {
             background-color: var(--primary-color);
             color: white;
-            padding: 18px 10px 15px 10px;
+            padding: 16px 10px;
             text-align: center;
             border-bottom: 5px solid var(--accent-color);
             display: flex;
@@ -152,33 +152,19 @@
             justify-content: center;
         }
 
-        /* Caja profesional para la palabra CREDENCIAL */
-        .fc-badge-box {
-            background-color: var(--accent-color);
-            color: #002244;
-            font-size: 9px;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 4px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        }
-
-        /* Cuadrado con bordes suaves para el logo */
+        /* Cuadrado con bordes suaves y un marco exterior más marcado para el logo */
         .fc-logo-container {
             width: 65px;
             height: 65px;
             background: white;
-            border-radius: 12px; /* Bordes suaves/redondeados */
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             margin-bottom: 8px;
             padding: 4px;
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--accent-color); /* Marco notable alrededor del logo */
         }
 
         .fc-logo {
@@ -194,6 +180,20 @@
             letter-spacing: 0.8px;
             line-height: 1.2;
             font-weight: 700;
+        }
+
+        /* Caja profesional para la palabra CREDENCIAL ubicada debajo del nombre de la empresa */
+        .fc-badge-box {
+            background-color: var(--accent-color);
+            color: #002244;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 12px;
+            border-radius: 4px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
         .fc-body {
@@ -292,14 +292,14 @@
                 <!-- Contenido real del fotocheck (Oculto por defecto) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
-                        <!-- Palabra CREDENCIAL dentro de una caja profesional -->
-                        <div class="fc-badge-box">CREDENCIAL</div>
-                        
-                        <!-- Logo dentro de un cuadrado con bordes suaves -->
+                        <!-- Logo con marco definido y bordes suaves -->
                         <div class="fc-logo-container">
                             <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
                         </div>
                         <h3>CONSORCIO VIAL BAAS</h3>
+                        
+                        <!-- Palabra CREDENCIAL ahora ubicada debajo del nombre de la empresa -->
+                        <div class="fc-badge-box">CREDENCIAL</div>
                     </div>
                     <div class="fc-body">
                         <div class="fc-name" id="out-nombre">NOMBRE DEL TRABAJADOR</div>
