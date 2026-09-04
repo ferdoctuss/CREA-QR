@@ -3,57 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de QR para DNI</title>
+    <title>Generador de Fotochecks - Consorcio Vial BAAS</title>
+    <!-- Librería para el Código QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         :root {
-            --primary-color: #0056b3;
-            --bg-color: #f4f7f6;
-            --box-bg: #ffffff;
-            --text-color: #333333;
+            --primary-color: #003366; /* Azul corporativo */
+            --accent-color: #f2a900; /* Acento amarillo/naranja tipo construcción/vial */
+            --bg-color: #e9ecef;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #6c757d;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
         }
 
-        .container {
-            background-color: var(--box-bg);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            text-align: center;
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 900px;
             width: 100%;
-            max-width: 350px;
+            justify-content: center;
+            align-items: flex-start;
         }
 
-        h2 {
-            margin-top: 0;
+        /* --- Estilos del Formulario --- */
+        .form-container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .form-container h2 {
             color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
         }
 
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 15px 0;
-            border: 2px solid #ddd;
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
             border-radius: 6px;
-            font-size: 16px;
-            text-align: center;
+            font-size: 15px;
+            box-sizing: border-box;
             transition: border-color 0.3s;
         }
 
-        input:focus {
+        .input-group input:focus {
             border-color: var(--primary-color);
             outline: none;
+        }
+
+        .error {
+            color: #d9534f;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
         }
 
         button {
@@ -62,69 +96,217 @@
             border: none;
             padding: 12px 20px;
             font-size: 16px;
+            font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s;
+            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #004494;
+            background-color: #002244;
         }
 
-        #qr-container {
-            margin-top: 25px;
+        /* --- Estilos del Fotocheck (La Tarjeta) --- */
+        .fotocheck-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .fotocheck {
+            width: 270px;
+            height: 420px;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        .fc-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fc-logo {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 50%;
+            padding: 3px;
+        }
+
+        .fc-header h3 {
+            margin: 0;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .fc-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .fc-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-main);
+            margin: 8px 0 4px 0;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .fc-puesto {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .fc-qr-container {
+            background: white;
+            padding: 6px;
+            border: 2px solid #eee;
+            border-radius: 6px;
             display: flex;
             justify-content: center;
-            min-height: 200px; /* Mantiene el espacio visual */
+            align-items: center;
+            width: 110px;
+            height: 110px;
         }
 
-        .error {
-            color: #d9534f;
-            font-size: 14px;
-            margin-top: -10px;
-            margin-bottom: 10px;
-            display: none;
+        .fc-footer-dni {
+            margin-top: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        /* Mensaje de espera */
+        .placeholder-text {
+            color: #aaa;
+            text-align: center;
+            margin-top: 50%;
+            transform: translateY(-50%);
+            padding: 0 20px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Generador de QR</h2>
-        <p>Ingresa el número de DNI</p>
-        
-        <input type="text" id="dniInput" placeholder="Ej: 12345678" maxlength="8" pattern="\d{8}">
-        <div id="errorMessage" class="error">Por favor, ingresa 8 dígitos válidos.</div>
-        
-        <button onclick="generarQR()">Generar QR</button>
+    <div class="dashboard">
+        <!-- Panel del Formulario -->
+        <div class="form-container">
+            <h2>Datos del Trabajador</h2>
+            
+            <div class="input-group">
+                <label for="nombreInput">Nombres y Apellidos</label>
+                <input type="text" id="nombreInput" placeholder="Ej: Juan Pérez">
+            </div>
 
-        <div id="qr-container"></div>
+            <div class="input-group">
+                <label for="dniInput">Número de DNI</label>
+                <input type="text" id="dniInput" placeholder="Ej: 12345678" maxlength="8">
+                <div id="errorDni" class="error">Ingresa un DNI válido de 8 dígitos.</div>
+            </div>
+
+            <div class="input-group">
+                <label for="puestoInput">Puesto / Cargo</label>
+                <input type="text" id="puestoInput" placeholder="Ej: Ingeniero Residente">
+            </div>
+
+            <button onclick="generarFotocheck()">Generar Fotocheck</button>
+        </div>
+
+        <!-- Panel del Fotocheck -->
+        <div class="fotocheck-wrapper">
+            <div class="fotocheck" id="credencial">
+                <!-- Estado vacío inicial -->
+                <div id="placeholder" class="placeholder-text">
+                    Completa los datos y presiona "Generar Fotocheck"
+                </div>
+
+                <!-- Contenido real del fotocheck (Oculto por defecto) -->
+                <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
+                    <div class="fc-header">
+                        <!-- Logo de la empresa jalado directo del repositorio -->
+                        <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
+                        <h3>CONSORCIO VIAL BAAS</h3>
+                    </div>
+                    <div class="fc-body">
+                        <div class="fc-name" id="out-nombre">NOMBRE DEL TRABAJADOR</div>
+                        <div class="fc-puesto" id="out-puesto">PUESTO</div>
+                        
+                        <div class="fc-qr-container" id="out-qr">
+                            <!-- Aquí va el código QR -->
+                        </div>
+
+                        <div class="fc-footer-dni">DNI: <span id="out-dni"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        function generarQR() {
+        function generarFotocheck() {
+            const nombre = document.getElementById("nombreInput").value.trim();
             const dni = document.getElementById("dniInput").value.trim();
-            const qrContainer = document.getElementById("qr-container");
-            const errorMessage = document.getElementById("errorMessage");
+            const puesto = document.getElementById("puestoInput").value.trim();
+            
+            const errorDni = document.getElementById("errorDni");
+            const placeholder = document.getElementById("placeholder");
+            const fotocheckContent = document.getElementById("fotocheck-content");
+            const qrContainer = document.getElementById("out-qr");
 
-            // Limpiamos el QR anterior si existe
-            qrContainer.innerHTML = "";
-
-            // Validación: Solo números y exactamente 8 dígitos
             const regexDNI = /^[0-9]{8}$/;
 
             if (!regexDNI.test(dni)) {
-                errorMessage.style.display = "block";
+                errorDni.style.display = "block";
+                return;
+            } else {
+                errorDni.style.display = "none";
+            }
+
+            if (nombre === "" || puesto === "") {
+                alert("Por favor, completa los campos de Nombre y Puesto.");
                 return;
             }
 
-            // Si es válido, ocultamos el error y generamos el QR
-            errorMessage.style.display = "none";
+            placeholder.style.display = "none";
+            fotocheckContent.style.display = "flex";
+
+            document.getElementById("out-nombre").innerText = nombre;
+            document.getElementById("out-puesto").innerText = puesto;
+            document.getElementById("out-dni").innerText = dni;
+
+            qrContainer.innerHTML = "";
+
             new QRCode(qrContainer, {
                 text: dni,
-                width: 200,
-                height: 200,
+                width: 100,
+                height: 100,
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
