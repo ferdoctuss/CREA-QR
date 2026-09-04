@@ -152,26 +152,26 @@
             justify-content: center;
         }
 
-        /* Cuadrado con bordes suaves y un marco exterior más marcado para el logo */
+        /* Logo totalmente circular con marco circular blanco destacado */
         .fc-logo-container {
-            width: 65px;
-            height: 65px;
-            background: white;
-            border-radius: 12px;
+            width: 70px;
+            height: 70px;
+            background: transparent;
+            border-radius: 50%; /* Círculo perfecto */
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             margin-bottom: 8px;
-            padding: 4px;
-            border: 2px solid var(--accent-color); /* Marco notable alrededor del logo */
+            padding: 3px;
+            border: 3px solid #ffffff; /* Marco circular de color blanco */
         }
 
         .fc-logo {
-            width: 55px;
-            height: 55px;
-            object-fit: contain;
-            border-radius: 8px;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%; /* Imagen interior también circular */
         }
 
         .fc-header h3 {
@@ -182,7 +182,7 @@
             font-weight: 700;
         }
 
-        /* Caja profesional para la palabra CREDENCIAL ubicada debajo del nombre de la empresa */
+        /* Caja profesional para la palabra CREDENCIAL debajo del nombre de la empresa */
         .fc-badge-box {
             background-color: var(--accent-color);
             color: #002244;
@@ -292,13 +292,13 @@
                 <!-- Contenido real del fotocheck (Oculto por defecto) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
-                        <!-- Logo con marco definido y bordes suaves -->
+                        <!-- Logo circular con marco circular blanco -->
                         <div class="fc-logo-container">
                             <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
                         </div>
                         <h3>CONSORCIO VIAL BAAS</h3>
                         
-                        <!-- Palabra CREDENCIAL ahora ubicada debajo del nombre de la empresa -->
+                        <!-- Palabra CREDENCIAL debajo del nombre de la empresa -->
                         <div class="fc-badge-box">CREDENCIAL</div>
                     </div>
                     <div class="fc-body">
