@@ -152,33 +152,40 @@
             justify-content: center;
         }
 
-        .fc-badge-label {
-            font-size: 10px;
+        /* Caja profesional para la palabra CREDENCIAL */
+        .fc-badge-box {
+            background-color: var(--accent-color);
+            color: #002244;
+            font-size: 9px;
             font-weight: 800;
-            color: var(--accent-color);
-            letter-spacing: 2px;
+            padding: 3px 10px;
+            border-radius: 4px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
+        /* Cuadrado con bordes suaves para el logo */
         .fc-logo-container {
-            width: 75px;
-            height: 75px;
+            width: 65px;
+            height: 65px;
             background: white;
-            border-radius: 50%;
+            border-radius: 12px; /* Bordes suaves/redondeados */
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             margin-bottom: 8px;
-            padding: 5px;
-            border: 2px solid var(--accent-color);
+            padding: 4px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
         }
 
         .fc-logo {
-            width: 65px;
-            height: 65px;
+            width: 55px;
+            height: 55px;
             object-fit: contain;
+            border-radius: 8px;
         }
 
         .fc-header h3 {
@@ -285,8 +292,10 @@
                 <!-- Contenido real del fotocheck (Oculto por defecto) -->
                 <div id="fotocheck-content" style="display: none; height: 100%; flex-direction: column;">
                     <div class="fc-header">
-                        <!-- Palabra CREDENCIAL en color amarillo -->
-                        <div class="fc-badge-label">CREDENCIAL</div>
+                        <!-- Palabra CREDENCIAL dentro de una caja profesional -->
+                        <div class="fc-badge-box">CREDENCIAL</div>
+                        
+                        <!-- Logo dentro de un cuadrado con bordes suaves -->
                         <div class="fc-logo-container">
                             <img src="icono.png" alt="Logo Empresa" class="fc-logo" onerror="this.style.display='none'">
                         </div>
