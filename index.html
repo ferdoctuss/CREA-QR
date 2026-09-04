@@ -120,6 +120,14 @@
             background-color: #218838;
         }
 
+        .instruction-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 8px;
+            display: none;
+        }
+
         /* --- Estilos del Fotocheck Vertical --- */
         .fotocheck-wrapper {
             display: flex;
@@ -152,7 +160,6 @@
             justify-content: center;
         }
 
-        /* Círculo con fondo BLANCO SÓLIDO y marco blanco */
         .fc-logo-container {
             width: 70px;
             height: 70px;
@@ -182,7 +189,6 @@
             font-weight: 700;
         }
 
-        /* Caja profesional para la palabra CREDENCIAL */
         .fc-badge-box {
             background-color: var(--accent-color);
             color: #002244;
@@ -241,7 +247,6 @@
             color: var(--text-muted);
         }
 
-        /* Mensaje de espera */
         .placeholder-text {
             color: #aaa;
             text-align: center;
@@ -277,8 +282,9 @@
 
             <button onclick="generarFotocheck()">Generar Fotocheck</button>
             
-            <!-- Botón de Descarga -->
-            <button id="btnDownload" class="btn-download" onclick="descargarFotocheck()">📥 Descargar Fotocheck</button>
+            <!-- Botón de Descarga / Vista previa -->
+            <button id="btnDownload" class="btn-download" onclick="descargarFotocheck()">🖼️ Ver Imagen para Guardar</button>
+            <div id="instructionText" class="instruction-text">Se abrirá la imagen. Mantén presionada la foto (o clic derecho) y selecciona "Guardar imagen".</div>
         </div>
 
         <!-- Panel del Fotocheck Vertical -->
@@ -324,6 +330,7 @@
             const fotocheckContent = document.getElementById("fotocheck-content");
             const qrContainer = document.getElementById("out-qr");
             const btnDownload = document.getElementById("btnDownload");
+            const instructionText = document.getElementById("instructionText");
 
             const regexDNI = /^[0-9]{8}$/;
 
@@ -358,29 +365,64 @@
             });
 
             btnDownload.style.display = "block";
+            instructionText.style.display = "block";
         }
 
         function descargarFotocheck() {
             const credencial = document.getElementById("credencial");
-            let nombreTrabajador = document.getElementById("nombreInput").value.trim().replace(/\s+/g, '_');
-            if (!nombreTrabajador) nombreTrabajador = "Trabajador";
 
             html2canvas(credencial, {
                 scale: 3,
                 useCORS: true,
                 backgroundColor: null
             }).then(canvas => {
-                // Convertir el canvas a un Blob asegurando el tipo image/png
-                canvas.toBlob(function(blob) {
-                    const url = URL.createObjectURL(blob);
-                    const enlace = document.createElement("a");
-                    enlace.href = url;
-                    enlace.download = `Fotocheck_${nombreTrabajador}.png`;
-                    document.body.appendChild(enlace);
-                    enlace.click();
-                    document.body.removeChild(enlace);
-                    URL.revokeObjectURL(url);
-                }, 'image/png');
+                // Convertir el canvas a una URL de imagen pura en base64 (PNG)
+                const dataURL = canvas.toDataURL("image/png");
+                
+                // Abrir la imagen en una nueva pestaña (evita el problema del .io en GitHub Pages)
+                const ventana = window.open();
+                ventana.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="es">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Guardar Fotocheck</title>
+                        <style>
+                            body {
+                                margin: 0;
+                                background-color: #222;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                height: 100vh;
+                                font-family: sans-serif;
+                                color: white;
+                                text-align: center;
+                                padding: 15px;
+                            }
+                            img {
+                                max-width: 100%;
+                                height: auto;
+                                border-radius: 10px;
+                                box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+                                margin-bottom: 20px;
+                            }
+                            p {
+                                font-size: 16px;
+                                background: rgba(255,255,255,0.1);
+                                padding: 10px 15px;
+                                border-radius: 6px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <img src="${dataURL}" alt="Fotocheck Generado">
+                        <p>📲 Mantén presionada la imagen (o haz clic derecho) y selecciona <b>"Guardar imagen"</b></p>
+                    </body>
+                    </html>
+                `);
+                ventana.document.close();
             });
         }
     </script>
