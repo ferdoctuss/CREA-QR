@@ -120,14 +120,6 @@
             background-color: #218838;
         }
 
-        .instruction-text {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-align: center;
-            margin-top: 8px;
-            display: none;
-        }
-
         /* --- Estilos del Fotocheck Vertical --- */
         .fotocheck-wrapper {
             display: flex;
@@ -160,6 +152,7 @@
             justify-content: center;
         }
 
+        /* Logo circular con fondo BLANCO SÓLIDO y marco blanco */
         .fc-logo-container {
             width: 70px;
             height: 70px;
@@ -189,6 +182,7 @@
             font-weight: 700;
         }
 
+        /* Caja profesional para la palabra CREDENCIAL */
         .fc-badge-box {
             background-color: var(--accent-color);
             color: #002244;
@@ -255,6 +249,73 @@
             padding: 0 20px;
             font-size: 15px;
         }
+
+        /* --- Estilos de la Ventana Modal para Guardar la Imagen --- */
+        .modal {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semitransparente */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--bg-color);
+            padding: 20px 25px 25px 25px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            max-width: 95%;
+            max-height: 95vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            max-height: 70vh;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #555;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .modal-instructions {
+            font-size: 15px;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin: 10px 0 0 0;
+        }
+        
+        .modal-subtext {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -282,9 +343,8 @@
 
             <button onclick="generarFotocheck()">Generar Fotocheck</button>
             
-            <!-- Botón de Descarga / Vista previa -->
-            <button id="btnDownload" class="btn-download" onclick="descargarFotocheck()">🖼️ Ver Imagen para Guardar</button>
-            <div id="instructionText" class="instruction-text">Se abrirá la imagen. Mantén presionada la foto (o clic derecho) y selecciona "Guardar imagen".</div>
+            <!-- Botón para ver imagen lista para descargar -->
+            <button id="btnDownload" class="btn-download" onclick="verImagen()">🖼️ Generar Imagen Final</button>
         </div>
 
         <!-- Panel del Fotocheck Vertical -->
@@ -319,6 +379,16 @@
         </div>
     </div>
 
+    <!-- VENTANA MODAL (Oculta por defecto) -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarModal()">&times;</span>
+            <p class="modal-instructions">📲 Tu fotocheck está listo</p>
+            <p class="modal-subtext">Mantén presionada la imagen (o clic derecho en PC) y selecciona <b>"Guardar imagen"</b></p>
+            <img id="finalImage" src="" alt="Fotocheck Listo para Guardar">
+        </div>
+    </div>
+
     <script>
         function generarFotocheck() {
             const nombre = document.getElementById("nombreInput").value.trim();
@@ -330,7 +400,6 @@
             const fotocheckContent = document.getElementById("fotocheck-content");
             const qrContainer = document.getElementById("out-qr");
             const btnDownload = document.getElementById("btnDownload");
-            const instructionText = document.getElementById("instructionText");
 
             const regexDNI = /^[0-9]{8}$/;
 
@@ -365,65 +434,32 @@
             });
 
             btnDownload.style.display = "block";
-            instructionText.style.display = "block";
         }
 
-        function descargarFotocheck() {
+        // Nueva función libre de bloqueos
+        function verImagen() {
             const credencial = document.getElementById("credencial");
+            const modal = document.getElementById("imageModal");
+            const finalImage = document.getElementById("finalImage");
 
             html2canvas(credencial, {
-                scale: 3,
+                scale: 3, // Alta resolución
                 useCORS: true,
                 backgroundColor: null
             }).then(canvas => {
-                // Convertir el canvas a una URL de imagen pura en base64 (PNG)
+                // Convertimos el diseño a imagen PNG
                 const dataURL = canvas.toDataURL("image/png");
                 
-                // Abrir la imagen en una nueva pestaña (evita el problema del .io en GitHub Pages)
-                const ventana = window.open();
-                ventana.document.write(`
-                    <!DOCTYPE html>
-                    <html lang="es">
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>Guardar Fotocheck</title>
-                        <style>
-                            body {
-                                margin: 0;
-                                background-color: #222;
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                                justify-content: center;
-                                height: 100vh;
-                                font-family: sans-serif;
-                                color: white;
-                                text-align: center;
-                                padding: 15px;
-                            }
-                            img {
-                                max-width: 100%;
-                                height: auto;
-                                border-radius: 10px;
-                                box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-                                margin-bottom: 20px;
-                            }
-                            p {
-                                font-size: 16px;
-                                background: rgba(255,255,255,0.1);
-                                padding: 10px 15px;
-                                border-radius: 6px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <img src="${dataURL}" alt="Fotocheck Generado">
-                        <p>📲 Mantén presionada la imagen (o haz clic derecho) y selecciona <b>"Guardar imagen"</b></p>
-                    </body>
-                    </html>
-                `);
-                ventana.document.close();
+                // Le pasamos la imagen al visualizador de la ventana modal
+                finalImage.src = dataURL;
+                
+                // Mostramos la ventana flotante en la misma pantalla (evita bloqueos de Apple/Safari)
+                modal.style.display = "flex";
             });
+        }
+
+        function cerrarModal() {
+            document.getElementById("imageModal").style.display = "none";
         }
     </script>
 </body>
