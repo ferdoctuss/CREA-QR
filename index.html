@@ -120,6 +120,14 @@
             background-color: #218838;
         }
 
+        .instruction-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 8px;
+            display: none;
+        }
+
         /* --- Estilos del Fotocheck Vertical --- */
         .fotocheck-wrapper {
             display: flex;
@@ -152,7 +160,6 @@
             justify-content: center;
         }
 
-        /* Logo circular con fondo BLANCO SÓLIDO y marco blanco */
         .fc-logo-container {
             width: 70px;
             height: 70px;
@@ -182,18 +189,25 @@
             font-weight: 700;
         }
 
-        /* Caja profesional para la palabra CREDENCIAL */
+        /* CORRECCIÓN: Caja ajustada para evitar el salto de texto en iOS/html2canvas */
         .fc-badge-box {
             background-color: var(--accent-color);
             color: #002244;
             font-size: 9px;
             font-weight: 800;
-            padding: 3px 12px;
             border-radius: 4px;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-top: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            
+            /* Ajustes clave para centrado perfecto */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 18px; /* Altura fija */
+            padding: 0 12px; /* Solo padding lateral */
+            line-height: 1; /* Resetea el interlineado del navegador */
         }
 
         .fc-body {
@@ -252,14 +266,14 @@
 
         /* --- Estilos de la Ventana Modal para Guardar la Imagen --- */
         .modal {
-            display: none; /* Oculto por defecto */
+            display: none;
             position: fixed;
             z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semitransparente */
+            background-color: rgba(0, 0, 0, 0.85);
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -436,24 +450,18 @@
             btnDownload.style.display = "block";
         }
 
-        // Nueva función libre de bloqueos
         function verImagen() {
             const credencial = document.getElementById("credencial");
             const modal = document.getElementById("imageModal");
             const finalImage = document.getElementById("finalImage");
 
             html2canvas(credencial, {
-                scale: 3, // Alta resolución
+                scale: 3, 
                 useCORS: true,
                 backgroundColor: null
             }).then(canvas => {
-                // Convertimos el diseño a imagen PNG
                 const dataURL = canvas.toDataURL("image/png");
-                
-                // Le pasamos la imagen al visualizador de la ventana modal
                 finalImage.src = dataURL;
-                
-                // Mostramos la ventana flotante en la misma pantalla (evita bloqueos de Apple/Safari)
                 modal.style.display = "flex";
             });
         }
